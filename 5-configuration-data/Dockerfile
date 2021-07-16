@@ -1,5 +1,6 @@
 FROM node:14-alpine AS base
-
+ARG NODE_ENV
+ENV NODE_ENV "${NODE_ENV:-production}"
 
 FROM base AS deps
 WORKDIR /app
@@ -11,5 +12,4 @@ FROM base
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules/
-ENTRYPOINT ["npm", "run"]
-CMD ["prod"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
